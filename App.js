@@ -21,6 +21,7 @@ export default function App() {
   };
 
   async function handleAdicionar() {
+    //O trim tira os espaços vazios no inicio e fim do texto
     if (!nome.trim() || !email.trim()) {
       Alert.alert('Erro', 'Preencha todos os campos');
       return;
@@ -36,9 +37,10 @@ export default function App() {
     await carregarPessoas();
   };
 
+  //useEffect é um hook do react
   useEffect(() => {
     prepararApp();
-  }, []);
+  }, []);//Esta vazio pois não tem mais nada que faça ele ser alterado
 
   return (
     <SafeAreaProvider>
@@ -64,10 +66,10 @@ export default function App() {
           <Button title="Adicionar" onPress={handleAdicionar} />
         </View>
 
-        <FlatList
-          data={pessoas}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+        <FlatList //criar lista de registros
+          data={pessoas} //dados 
+          keyExtractor={(item) => item.id.toString()}//chave para se referir a cada registro
+          renderItem={({ item }) => ( //rederinzar itens para cada item mostra PessoaItem
             <PessoaItem id={item.id} nome={item.nome} email={item.email} onDelete={handleDeletar} />
           )}
         />
