@@ -7,27 +7,28 @@ const db = SQLite.openDatabaseSync('cadastros.db');
 //await não precisa esperar para abertura do BD
 export async function initDB() {
   await db.execAsync(`
-    CREATE TABLE IF NOT EXISTS pessoas (
+    CREATE TABLE IF NOT EXISTS pet (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nome TEXT NOT NULL,
-      email TEXT NOT NULL
+      nomeTutor TEXT NOT NULL,
+      telefone TEXT NOT NULL,
+      nomePet TEXT NOT NULL
     );
   `);
 };
 
-export async function adicionarPessoa(nome, email) {
+export async function adicionarPessoa(nomeTutor, telefone, nomePet) {
   //runAsync passa dois parametros, os nomes e os valores que vão ser substituidos         
   await db.runAsync(
-    'INSERT INTO pessoas (nome, email) VALUES (?, ?);',
-    [nome, email]
+    'INSERT INTO pessoas (nomeTutor, telefone, nomePet) VALUES (?, ?, ?);',
+    [nomeTutor, telefone, nomePet]
   );
 };
 
-export async function listarPessoas() {
-  const pessoas = await db.getAllAsync('SELECT * FROM pessoas;');
-  return pessoas;
+export async function listarPet() {
+  const pet = await db.getAllAsync('SELECT * FROM pet;');
+  return pet;
 };
 
 export async function deletarPessoa(id) {
-  await db.runAsync('DELETE FROM pessoas WHERE id = ?;', [id]);
+  await db.runAsync('DELETE FROM pet WHERE id = ?;', [id]);
 };
