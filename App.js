@@ -1,40 +1,42 @@
 import Estilos from './styles/Estilos.js';
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, Alert } from 'react-native';
-import { initDB, adicionarPessoa, listarPessoas, deletarPessoa } from './database';
-import PessoaItem from './components/PessoaItem';
+import { initDB, adicionarPessoa, listarPets, deletarPet } from './database';
+import PetItem from './components/PetItem';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [pessoas, setPessoas] = useState([]);
+  const [nomeTutor, setNomeTutor] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [nomePet, setNomePet] = useState('');
+  const [pet, setPet] = useState([]);
 
-  async function carregarPessoas() {
-    const lista = await listarPessoas();
-    setPessoas(lista);
+  async function carregarPet() {
+    const lista = await listarPets();
+    setPet(lista);
   };
   
   const prepararApp = async () => {
     await initDB();
-    await carregarPessoas();
+    await carregarPet();
   };
 
   async function handleAdicionar() {
     //O trim tira os espaços vazios no inicio e fim do texto
-    if (!nome.trim() || !email.trim()) {
+    if (!nomeTutor.trim() || !telefone.trim() || !nomePet.trim()) {
       Alert.alert('Erro', 'Preencha todos os campos');
       return;
     }
-    await adicionarPessoa(nome, email);
-    setNome('');
-    setEmail('');
-    await carregarPessoas();
+    await adicionarPessoa(nomeTutor, telefone, nomePet);
+    setNomeTutor('');
+    setTelefone('');
+    setNomePet('')
+    await carregarPet();
   };
 
   async function handleDeletar(id) {
-    await deletarPessoa(id);
-    await carregarPessoas();
+    await deletarPet(id);
+    await carregarPet();
   };
 
   //useEffect é um hook do react
@@ -46,31 +48,36 @@ export default function App() {
     <SafeAreaProvider>
       <SafeAreaView style={Estilos.safeAreaViewContainer}>
         <Text style={Estilos.textoTitulo}>
-          Cadastro de Pessoas (SQLite)
+          Cadastro de Pets (SQLite)
         </Text>
 
         <View style={Estilos.camposCadastroContainer}>
           <TextInput
-            placeholder="Nome"
-            value={nome}
-            onChangeText={setNome}
+            placeholder="Nome Tutor"
+            value={nomeTutor}
+            onChangeText={setNomeTutor}
             style={Estilos.campoTexto}
           />
           <TextInput
-            placeholder="E-mail"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
+            placeholder="Telefone"
+            value={telefone}
+            onChangeText={setTelefone}
+            style={Estilos.campoTexto}
+          />
+          <TextInput
+            placeholder="Nome Pet"
+            value={nomePet}
+            onChangeText={setNomePet}
             style={Estilos.campoTexto}
           />
           <Button title="Adicionar" onPress={handleAdicionar} />
         </View>
 
         <FlatList //criar lista de registros
-          data={pessoas} //dados 
+          data={pet} //dados 
           keyExtractor={(item) => item.id.toString()}//chave para se referir a cada registro
           renderItem={({ item }) => ( //rederinzar itens para cada item mostra PessoaItem
-            <PessoaItem id={item.id} nome={item.nome} email={item.email} onDelete={handleDeletar} />
+            <PetItem id={item.id} nomeTutor={item.nomeTutor} telefone={item.nomeTelefone} nomePet={item.nomePet} onDelete={handleDeletar} />
           )}
         />
       </SafeAreaView>
