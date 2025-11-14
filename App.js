@@ -1,7 +1,7 @@
 import Estilos from './styles/Estilos.js';
 import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, Alert } from 'react-native';
-import { initDB, adicionarPessoa, listarPets, deletarPet } from './database';
+import { initDB, adicionarPet, listarPets, deletarPet } from './database';
 import PetItem from './components/PetItem';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -27,7 +27,7 @@ export default function App() {
       Alert.alert('Erro', 'Preencha todos os campos');
       return;
     }
-    await adicionarPessoa(nomeTutor, telefone, nomePet);
+    await adicionarPet(nomeTutor, telefone, nomePet);
     setNomeTutor('');
     setTelefone('');
     setNomePet('')

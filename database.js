@@ -16,7 +16,7 @@ export async function initDB() {
   `);
 };
 
-export async function adicionarPessoa(nomeTutor, telefone, nomePet) {
+export async function adicionarPet(nomeTutor, telefone, nomePet) {
   //runAsync passa dois parametros, os nomes e os valores que vão ser substituidos         
   await db.runAsync(
     'INSERT INTO pessoas (nomeTutor, telefone, nomePet) VALUES (?, ?, ?);',
@@ -29,6 +29,6 @@ export async function listarPet() {
   return pet;
 };
 
-export async function deletarPessoa(id) {
+export async function deletarPet(id) {
   await db.runAsync('DELETE FROM pet WHERE id = ?;', [id]);
 };
