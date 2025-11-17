@@ -19,12 +19,12 @@ export async function initDB() {
 export async function adicionarPet(nomeTutor, telefone, nomePet) {
   //runAsync passa dois parametros, os nomes e os valores que vão ser substituidos         
   await db.runAsync(
-    'INSERT INTO pessoas (nomeTutor, telefone, nomePet) VALUES (?, ?, ?);',
+    'INSERT INTO pet (nomeTutor, telefone, nomePet) VALUES (?, ?, ?);',
     [nomeTutor, telefone, nomePet]
   );
 };
 
-export async function listarPet() {
+export async function listarPets() {
   const pet = await db.getAllAsync('SELECT * FROM pet;');
   return pet;
 };

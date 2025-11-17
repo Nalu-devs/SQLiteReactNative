@@ -3,7 +3,8 @@ import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, FlatList, Alert } from 'react-native';
 import { initDB, adicionarPet, listarPets, deletarPet } from './database';
 import PetItem from './components/PetItem';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView, SafeAreaProvider, StatusBar } from 'react-native-safe-area-context';
+
 
 export default function App() {
   const [nomeTutor, setNomeTutor] = useState('');
@@ -11,15 +12,17 @@ export default function App() {
   const [nomePet, setNomePet] = useState('');
   const [pet, setPet] = useState([]);
 
+
   async function carregarPet() {
     const lista = await listarPets();
     setPet(lista);
   };
-  
+ 
   const prepararApp = async () => {
     await initDB();
     await carregarPet();
   };
+
 
   async function handleAdicionar() {
     //O trim tira os espaços vazios no inicio e fim do texto
@@ -34,15 +37,18 @@ export default function App() {
     await carregarPet();
   };
 
+
   async function handleDeletar(id) {
     await deletarPet(id);
     await carregarPet();
   };
 
+
   //useEffect é um hook do react
   useEffect(() => {
     prepararApp();
   }, []);//Esta vazio pois não tem mais nada que faça ele ser alterado
+
 
   return (
     <SafeAreaProvider>
@@ -50,6 +56,7 @@ export default function App() {
         <Text style={Estilos.textoTitulo}>
           Cadastro de Pets (SQLite)
         </Text>
+
 
         <View style={Estilos.camposCadastroContainer}>
           <TextInput
@@ -73,11 +80,12 @@ export default function App() {
           <Button title="Adicionar" onPress={handleAdicionar} />
         </View>
 
+
         <FlatList //criar lista de registros
-          data={pet} //dados 
+          data={pet} //dados
           keyExtractor={(item) => item.id.toString()}//chave para se referir a cada registro
           renderItem={({ item }) => ( //rederinzar itens para cada item mostra PessoaItem
-            <PetItem id={item.id} nomeTutor={item.nomeTutor} telefone={item.nomeTelefone} nomePet={item.nomePet} onDelete={handleDeletar} />
+            <PetItem id={item.id} nomeTutor={item.nomeTutor} telefone={item.telefone} nomePet={item.nomePet} onDelete={handleDeletar} />
           )}
         />
       </SafeAreaView>
